@@ -4,6 +4,8 @@ function [Timings, Weights, VarExp, AVG_timing] = PCA_NMF(all,x)
 %   Data for n subjects should be stored in a no. frames x features x
 %   subjects matrix. x is number of factors
 %specs = ['RtES','RlES','RGMa','RGMe','RTFL','RBF','REO','RIO','LtES','LlES','LGMa','LGMe','LTFL','LBF','LEO','LIO'];
+%   The outputs will be Timings (3D), Weights (3D), and VarExp (2D) from the PCA, which
+%   are subject specific. 
 
 features = size(all,2);
 subjects = size(all,3);
@@ -23,9 +25,6 @@ for iii = 1:subjects
     Weights(:,:,iii) = coeff(:,1:3); %Fill this with weights from 3 factors
     VarExp(:,iii) = explained;       %Put the var explained by first PC in first column of VarExp
 end
-assignin('base', 'Timings', Timings);
-assignin('base', 'Weights', Weights);
-assignin('base', 'VarExp', VarExp);
 
 AVG_timing = mean(Timings,3);   %Average timing synergy
 %This will plot the time series for each subject
@@ -42,5 +41,15 @@ for c = 1:subjects
     hold on
 end
 
+avg_wts = mean(Weights,3);
+for cc = 1:factors
+    MakeCors(avg_wts(:,cc))
+end
+
+assignin('base', 'Timings', Timings);
+assignin('base', 'Weights', Weights);
+assignin('base', 'VarExp', VarExp);
+assignin('base', 'avg_wts', avg_wts);
+assignin('base', 'Avg_timing', AVG_timing);
 end
 
