@@ -1,9 +1,8 @@
-function [Timings, Weights, VarExp, AVG_timing] = PCA_NMF(all,x)
+function PCA_NMF(all,x)
 %PCA_NMF will run a PCA and NMF with a specified number of factors on time
-%series data
+%series data. For use in MATLAB
 %   Data for n subjects should be stored in a no. frames x features x
 %   subjects matrix. x is number of factors
-%specs = ['RtES','RlES','RGMa','RGMe','RTFL','RBF','REO','RIO','LtES','LlES','LGMa','LGMe','LTFL','LBF','LEO','LIO'];
 %   The outputs will be Timings (3D), Weights (3D), and VarExp (2D) from the PCA, which
 %   are subject specific. 
 
