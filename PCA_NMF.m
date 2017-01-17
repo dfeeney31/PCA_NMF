@@ -1,8 +1,9 @@
 function PCA_NMF(all,x)
 %PCA_NMF will run a PCA and NMF with a specified number of factors on time
-%series data. For use in MATLAB
+%series data
 %   Data for n subjects should be stored in a no. frames x features x
 %   subjects matrix. x is number of factors
+%specs = ['RtES','RlES','RGMa','RGMe','RTFL','RBF','REO','RIO','LtES','LlES','LGMa','LGMe','LTFL','LBF','LEO','LIO'];
 %   The outputs will be Timings (3D), Weights (3D), and VarExp (2D) from the PCA, which
 %   are subject specific. 
 
@@ -45,10 +46,47 @@ for cc = 1:factors
     MakeCors(avg_wts(:,cc))
 end
 
+figure(5)
+for lll = 1:3
+subplot(3,1,lll)
+plot(AVG_timing(:,lll))
+end
+
 assignin('base', 'Timings', Timings);
 assignin('base', 'Weights', Weights);
 assignin('base', 'VarExp', VarExp);
 assignin('base', 'avg_wts', avg_wts);
 assignin('base', 'Avg_timing', AVG_timing);
+
+%% Perform NMF
+%W's are time series, Hs are weights
+features = size(all,2);
+subjects = size(all,3);
+factors = 3;
+x = 3;
+W = zeros(size(all,1),x,subjects);  %Preallocate timings
+Hs = zeros(x,features,subjects);    %Preallocate muscle weights
+
+for ab = 1:subjects
+    [W(:,:,ab),Hs(:,:,ab)] = nnmf(all(:,:,ab),3);
+end
+
+%Normalization of weights
+norm_cors = zeros(1,x,features);%Preallocate normalized correlations
+maxes = max(Hs,[],2);                   %Obtain maxes for each row
+norm_cors = bsxfun(@rdivide,Hs,maxes);
+
+Avg_cor = mean(norm_cors,3);
+Avg_cor = Avg_cor';
+
+for dd = 1:factors
+    MakeCors(Avg_cor(:,dd))
+end
+
+% maxes = zeros(1,3);
+% norm_cors = zeros(3,16);
+assignin('base', 'W', W);
+assignin('base', 'Norm_cors', norm_cors);
+assignin('base', 'Avg_cors', Avg_cor);
 end
 
