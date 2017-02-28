@@ -5,6 +5,7 @@ function PCA_NMF(all,x)
 %   subjects matrix. x is number of factors
 %   The outputs will be Timings (3D), Weights (3D), and VarExp (2D) from the PCA, which
 %   are subject specific. 
+
 rng(10); %Set seed
 features = size(all,2);
 subjects = size(all,3);
@@ -27,13 +28,13 @@ end
 
 AVG_timing = mean(Timings,3);   %Average timing synergy
 %This will plot the time series for each subject
-figure(1)                          
-for c = 1:subjects
-    subplot(x,1,c)
-    plot(Timings(:,1,c))
-    hold on
-end
-hold off
+% figure(1)                          
+% for c = 1:subjects
+%     subplot(subjects,1,c)
+%     plot(Timings(:,1,c))
+%     hold on
+% end
+% hold off
 
 avg_wts = mean(Weights,3);
 figure(2)
@@ -88,7 +89,7 @@ ax.XTick = [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16];
 ax.XTickLabel = {'LBF','LES','LGMAX','LIO','LLD','LMG','LRF','LTA','RBF','RES','RGMAX','RIO','RLD','RMG','RRF','RTA'}
 
 figure(5)
-for ee = 1:subjects
+for ee = 1:x
    subplot(x,1,ee)
     plot(W(:,1,ee))
     hold on
@@ -118,4 +119,5 @@ assignin('base', 'AvgVarExp', AvgVarExp);
 assignin('base', 'CumVarExp', CumVarExp);
 assignin('base', 'SDvar', SDvar);
 end
+
 
