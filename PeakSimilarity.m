@@ -1,3 +1,4 @@
+% Use this file to sort the weights from 'module' number of signals to match peaks %
 subjects = 6;
 modules = 5;
 A = zeros(modules,modules);
